@@ -19,7 +19,6 @@ public class StringHelper {
      * @return 第count次匹配，sBegin和sEnd中间的内容
      */
     public static String getContent(String source, String sBegin, String sEnd, int count) {
-        //截取开头和结尾坐标
         int nBeginIndex = 0, nEndIndex;
 
         for (int i = 0; i < count; i++) {
