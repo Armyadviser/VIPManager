@@ -13,8 +13,8 @@ import storm_falcon.util.ReflectUtil;
  */
 public abstract class BaseVO {
 	
-	public String no;
-	public Date date;
+	public String no;//series number
+	public Date date;//create time
 	public int delsign;//存在标识,0删除；1存在
 	
 	public String toString() {
