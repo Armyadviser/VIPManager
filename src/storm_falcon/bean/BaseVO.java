@@ -9,7 +9,6 @@ import storm_falcon.util.ReflectUtil;
 
 /**
  * @author Storm_Falcon
- * getNo和getDate本来可以在父类实现
  * 子类都有no和date，但是反射时顺序会有影响（先子类后父类）
  */
 public abstract class BaseVO {
