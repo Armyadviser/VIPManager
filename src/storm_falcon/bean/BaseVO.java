@@ -35,7 +35,6 @@ public abstract class BaseVO {
 		json = json.substring(1, json.length() - 1);//去掉前后大括号
 		Arrays.stream(json.split(", "))
 			.map(ReflectUtil::json2Entry)
-//			.peek(System.out::println)
 			.forEach(entry -> ReflectUtil.setFieldValue(entry, t));
 		return t;
 	}
