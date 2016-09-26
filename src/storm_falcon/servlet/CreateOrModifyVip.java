@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
 
-public class CreateOrModify extends HttpServlet {
+public class CreateOrModifyVip extends HttpServlet {
 
 	private static final long serialVersionUID = 5058600489726432378L;
 

@@ -15,7 +15,7 @@ import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
 import storm_falcon.util.SubPager;
 
-public class Search extends HttpServlet {
+public class SearchVip extends HttpServlet {
 
 	private static final long serialVersionUID = 5535621393620539679L;
 

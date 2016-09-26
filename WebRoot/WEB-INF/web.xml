@@ -13,37 +13,46 @@
   </filter-mapping>
     
   <servlet>
-    <servlet-name>CreateOrModify</servlet-name>
-    <servlet-class>storm_falcon.servlet.CreateOrModify</servlet-class>
+    <servlet-name>CreateOrModifyVip</servlet-name>
+    <servlet-class>storm_falcon.servlet.CreateOrModifyVip</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>Delete</servlet-name>
-    <servlet-class>storm_falcon.servlet.Delete</servlet-class>
+    <servlet-name>DeleteVip</servlet-name>
+    <servlet-class>storm_falcon.servlet.DeleteVip</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>Search</servlet-name>
-    <servlet-class>storm_falcon.servlet.Search</servlet-class>
+    <servlet-name>SearchVip</servlet-name>
+    <servlet-class>storm_falcon.servlet.SearchVip</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Login</servlet-name>
     <servlet-class>storm_falcon.servlet.Login</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>AddOrder</servlet-name>
+    <servlet-class>storm_falcon.servlet.AddOrder</servlet-class>
+  </servlet>
+
 
   <servlet-mapping>
-    <servlet-name>CreateOrModify</servlet-name>
-    <url-pattern>/CreateOrModify</url-pattern>
+    <servlet-name>CreateOrModifyVip</servlet-name>
+    <url-pattern>/CreateOrModifyVip</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>Delete</servlet-name>
-    <url-pattern>/Delete</url-pattern>
+    <servlet-name>DeleteVip</servlet-name>
+    <url-pattern>/DeleteVip</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>Search</servlet-name>
-    <url-pattern>/Search</url-pattern>
+    <servlet-name>SearchVip</servlet-name>
+    <url-pattern>/SearchVip</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
     <url-pattern>/Login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddOrder</servlet-name>
+    <url-pattern>/AddOrder</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

@@ -4,12 +4,12 @@ public class Order extends BaseVO {
 	
 	public String vipNo;
 	public String vipName;
-	public String product;
+	public String name;//服务、商品名
 	public double money;
 	
 	@Override
 	public String getKeyword() {
-		return no + vipNo + vipName + product;
+		return no + vipNo + vipName + name;
 	}
 
 }

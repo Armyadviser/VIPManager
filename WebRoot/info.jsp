@@ -7,6 +7,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
+<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -16,13 +17,13 @@
 $(document).ready(function() {
 	enableVipManage(1);
 });
-function showWindow() {
-	$('.theme-popover-mask').fadeIn(100);
-	$('.theme-popover').slideDown(200);
+function showWindow(win_id) {
+	$('#popmask').fadeIn(100);
+	$('#' + win_id).slideDown(200);
 }
-function closeWindow() {
-	$('.theme-popover-mask').fadeOut(100);
-	$('.theme-popover').slideUp(200);
+function closeWindow(win_id) {
+	$('#popmask').fadeOut(100);
+	$('#' + win_id).slideUp(200);
 }
 function enableOrderList() {
 	$("#btnVipManage").removeClass('active');
@@ -54,7 +55,7 @@ function enableVipManage(page) {
 		$("#tabletitle").html(text);
 	});
 	
-	$.post("Search", {
+	$.post("SearchVip", {
 		'key' : '',
 		'page' : page,
 		'size' : 10
@@ -72,7 +73,8 @@ function enableVipManage(page) {
 				"<td>" + vip.credit + "</td>" + 
 				"<td>" + vip.point + "</td>" + 
 				"<td>" + vip.level + "</td>";
-			text += "<td><button>消费</button>/<button>充值</button></td></tr>";
+			text += "<td><button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_add_order')\">消费</button>/" + 
+				"<button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_charge')\">充值</button></td></tr>";
 			$("#tablecontent").append(text);
 		});
 		
@@ -98,14 +100,14 @@ function enableVipManage(page) {
 			</div>
 			<div class="col-lg-8">&nbsp;</div>
 			<div class="col-lg-1">
-				<a class="btn btn-primary btn-sm" onclick="showWindow()">添加</a>
-				<div class="theme-popover">
+				<a class="btn btn-primary btn-sm" onclick="showWindow('win_add_vip')">添加</a>
+				<div id="win_add_vip" class="theme-popover">
 				     <div class="theme-poptit">
-				          <a onclick="closeWindow()" title="关闭" class="close">×</a>
+				          <a onclick="closeWindow('win_add_vip')" title="关闭" class="close">×</a>
 				          <h4>添加VIP信息</h4>
 				     </div>
 				     <div class="theme-popbod dform">
-				     	<form class="theme-signin" action="CreateOrModify" method="post">
+				     	<form class="theme-signin" action="CreateOrModifyVip" method="post">
 				        	<table width="50%" height="100%" cellspacing="20" >
 				        		<tr>
 				        			<td><h3>姓名</h3></td>
@@ -136,7 +138,56 @@ function enableVipManage(page) {
 			           </form>
 				     </div>
 				</div>
-				<div class="theme-popover-mask"></div>
+				<div id="win_add_order" class="theme-popover">
+				     <div class="theme-poptit">
+				          <a onclick="closeWindow('win_add_order')" title="关闭" class="close">×</a>
+				          <h4>新增订单</h4>
+				     </div>
+				     <div class="theme-popbod dform">
+				     	<form class="theme-signin" action="AddOrder" method="post">
+				        	<table width="50%" height="100%" cellspacing="20" >
+				        		<tr>
+				        			<td><h3>商品/服务</h3></td>
+				        			<td align="right"><input class="input-sm" type="text" name="name" size="20" /></td>
+				        		</tr>
+				        		<tr><td>&nbsp;</td></tr>
+				        		<tr>
+									<td><h3>价格（元）</h3></td>
+									<td align="right"><input class="input-sm" type="text" name="tel" size="20" /></td>
+								</tr>
+				        		<tr><td>&nbsp;</td></tr>
+				        		<tr>
+									<td colspan="2">
+										<input class="btn btn-primary" style="width: 100%;" type="submit" name="submit" value=" 确 定 " />
+									</td>
+				        		</tr>
+				        	</table>
+			           </form>
+				     </div>
+				</div>
+				<div id="win_charge" class="theme-popover">
+				     <div class="theme-poptit">
+				          <a onclick="closeWindow('win_charge')" title="关闭" class="close">×</a>
+				          <h4>充值</h4>
+				     </div>
+				     <div class="theme-popbod dform">
+				     	<form class="theme-signin" action="Charge" method="post">
+				        	<table width="50%" height="100%" cellspacing="20" >
+				        		<tr>
+				        			<td><h3>金额</h3></td>
+				        			<td align="right"><input class="input-sm" type="text" name="name" size="20" /></td>
+				        		</tr>
+				        		<tr><td>&nbsp;</td></tr>
+				        		<tr>
+									<td colspan="2">
+										<input class="btn btn-primary" style="width: 100%;" type="submit" name="submit" value=" 确 定 " />
+									</td>
+				        		</tr>
+				        	</table>
+			           </form>
+				     </div>
+				</div>
+				<div id="popmask" class="theme-popover-mask"></div>
 			</div>
 		</div>
 	</div>
@@ -144,30 +195,8 @@ function enableVipManage(page) {
 		<div class="row">
 			<div class="span12">
 				<table class="table table-hover table-bordered">
-					<thead id="tabletitle">
-						<tr class="warning">
-							<th>会员号</th>
-							<th>姓名</th>
-							<th>电话</th>
-							<th>创建日期</th>
-							<th>余额</th>
-							<th>积分</th>
-							<th>等级</th>
-							<th>操作</th>
-						</tr>
-					</thead>
-					<tbody id="tablecontent">
-						<tr class="success">
-							<td>1</td>
-							<td>TB - Monthly</td>
-							<td>01/04/2012</td>
-							<td>Approved</td>
-							<td>Approved</td>
-							<td>Approved</td>
-							<td>Approved</td>
-							<td>消费/充值</td>
-						</tr>
-					</tbody>
+					<thead id="tabletitle"></thead>
+					<tbody id="tablecontent"></tbody>
 				</table>
 			</div>
 		</div>

@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileReader implements Closeable {
@@ -158,7 +157,7 @@ public class FileReader implements Closeable {
 	 */
 	private static <T> Stream<T> forEachWithProcessor(String filePath, String encode, BiFunction<Integer, String, T> processor) {
 		try (FileReader reader = new FileReader()) {
-			reader.open(filePath);
+			reader.open(filePath, encode);
 			Stream<T> stream = Stream.empty();
 
 			while (reader.hasNext()) {
@@ -218,23 +217,8 @@ public class FileReader implements Closeable {
 	}
 
 	public static void main(String[] args) {
-		String filePath = "E:\\Document\\Big Data\\test_sort_data.txt";
-		FileReader.mapForEach(filePath, (num, e) -> {
-			if (num > 10) {
-				return null;
-			}
-			return e;
-		}).filter(e -> e != null)
-				.collect(Collectors.toList())
-				.forEach(System.out::println);
+		String filePath = "D:\\Program Filies\\MyEclipse 2015\\vip.data";
 
-		FileReader.forEach(filePath, System.out::println);
-
-		long sum = FileReader.mapForEach(
-						filePath,
-						(lineNumber, lineContent) -> lineContent.length()
-				).mapToInt(n -> n)
-				.sum();
-		System.out.println(sum);
+		FileReader.forEach(filePath, "utf-8", System.out::println);
 	}
 }

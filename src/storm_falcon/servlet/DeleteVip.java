@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import storm_falcon.bean.VIPManager;
 
-public class Delete extends HttpServlet {
+public class DeleteVip extends HttpServlet {
 
 	private static final long serialVersionUID = -242541482915548530L;
 
