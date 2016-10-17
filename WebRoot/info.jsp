@@ -145,20 +145,20 @@ function enableVipManage(page) {
 				     </div>
 				     <div class="theme-popbod dform">
 				     	<form class="theme-signin" action="AddOrder" method="post">
-				        	<table width="50%" height="100%" cellspacing="20" >
+				        	<table width="70%" height="100%" cellspacing="20" >
 				        		<tr>
-				        			<td><h3>商品/服务</h3></td>
-				        			<td align="right"><input class="input-sm" type="text" name="name" size="20" /></td>
+				        			<td width="40%" align="right"><h3>商品/服务</h3></td>
+				        			<td width="60%" align="left"><input class="input-sm" type="text" name="name" size="20" /></td>
 				        		</tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
-									<td><h3>价格（元）</h3></td>
-									<td align="right"><input class="input-sm" type="text" name="tel" size="20" /></td>
+									<td align="right"><h3>价格(元)</h3></td>
+									<td align="left"><input class="input-sm" type="text" name="tel" size="20" /></td>
 								</tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
-									<td colspan="2">
-										<input class="btn btn-primary" style="width: 100%;" type="submit" name="submit" value=" 确 定 " />
+									<td colspan="2" align="center">
+										<input class="btn btn-primary" style="width: 80%;" type="submit" name="submit" value=" 确 定 " />
 									</td>
 				        		</tr>
 				        	</table>
@@ -172,7 +172,7 @@ function enableVipManage(page) {
 				     </div>
 				     <div class="theme-popbod dform">
 				     	<form class="theme-signin" action="Charge" method="post">
-				        	<table width="50%" height="100%" cellspacing="20" >
+				        	<table width="50%" height="100%" cellspacing="20" style="margin-top: 50px">
 				        		<tr>
 				        			<td><h3>金额</h3></td>
 				        			<td align="right"><input class="input-sm" type="text" name="name" size="20" /></td>
@@ -214,9 +214,6 @@ function enableVipManage(page) {
 				  <li><a href="#">&laquo;</a></li>
 				  <li><a href="#">1</a></li>
 				  <li><a href="#">2</a></li>
-				  <li><a href="#">3</a></li>
-				  <li><a href="#">4</a></li>
-				  <li><a href="#">5</a></li>
 				  <li><a href="#">&raquo;</a></li>
 				</ul>
 			</div>
