@@ -1,7 +1,7 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,11 +31,10 @@ public class DeleteVip extends HttpServlet {
 		
 		manager.flush();
 		
-		// TODO response
-		PrintWriter out = response.getWriter();
-		out.print(this.getClass());
-		out.flush();
-		out.close();
+		System.out.println(new Date() + " delete vip.");
+		System.out.println(no);
+		
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 }

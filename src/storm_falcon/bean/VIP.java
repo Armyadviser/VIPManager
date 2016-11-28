@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class VIP extends BaseVO {
 	
+	private static final long serialVersionUID = 5406781341056804301L;
+	
 	public String name = null;//姓名
 	public String tel = null;//电话
 	public double credit;//余额
@@ -26,10 +28,7 @@ public class VIP extends BaseVO {
 		vip.level = 3;
 		vip.delsign = 1;
 		
-		System.out.println(vip.toString());
+		System.out.println(vip.clone());
 		
-		String json = "{\"name\":\"张三\", \"tel\":\"13023842718\", \"credit\":43.0, \"point\":20, \"level\":3, \"no\":\"0001\", \"date\":\"2016-07-08 17:29:23\", \"delsign\":1}";
-		Order order = Order.parseJson(json, Order.class);
-		System.out.println(order);
 	}
 }

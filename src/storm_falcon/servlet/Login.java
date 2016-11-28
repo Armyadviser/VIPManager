@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import storm_falcon.bean.OrderManager;
+import storm_falcon.bean.VIPManager;
 import storm_falcon.file.FileReader;
 import storm_falcon.util.MD5;
 
@@ -36,6 +38,8 @@ public class Login extends HttpServlet {
 		pwd = MD5.encode(pwd);
 		
 		if (pwd.equals(password)) {
+			VIPManager.getInstance().reload();
+			OrderManager.getInstance().reload();
 			request.getSession().setAttribute("pwd", pwd);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {

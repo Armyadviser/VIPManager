@@ -32,6 +32,11 @@
     <servlet-name>AddOrder</servlet-name>
     <servlet-class>storm_falcon.servlet.AddOrder</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>SearchOrder</servlet-name>
+    <servlet-class>storm_falcon.servlet.SearchOrder</servlet-class>
+  </servlet>
+
 
 
   <servlet-mapping>
@@ -53,6 +58,10 @@
   <servlet-mapping>
     <servlet-name>AddOrder</servlet-name>
     <url-pattern>/AddOrder</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SearchOrder</servlet-name>
+    <url-pattern>/SearchOrder</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

@@ -14,18 +14,25 @@
 <link href="css/lanrenzhijia.css" rel="stylesheet">
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script>
+var vipEnabled = false;
+var orderEnabled = false;
+
 $(document).ready(function() {
-	enableVipManage(1);
+	enableVipManage(1, '');
 });
-function showWindow(win_id) {
+function showWindow(win_id, docId, vipNo) {
 	$('#popmask').fadeIn(100);
 	$('#' + win_id).slideDown(200);
+	$('#' + docId).val(vipNo);
 }
 function closeWindow(win_id) {
 	$('#popmask').fadeOut(100);
 	$('#' + win_id).slideUp(200);
 }
-function enableOrderList() {
+function enableOrderList(page, key) {
+	orderEnabled = true;
+	vipEnabled = false;
+	
 	$("#btnVipManage").removeClass('active');
 	$("#btnOrderList").addClass('active');
 	
@@ -38,11 +45,36 @@ function enableOrderList() {
 		$("#tabletitle").html(text);
 	});
 	
-	$.post("", {}, function(data, textStatus, req) {
-		
-	}, "json");
+	$.post("SearchOrder", {
+		'key' : key,
+		'page' : page,
+		'size' : 10
+		}, function(data, textStatus, req) {
+			console.table(data.data);
+			//清空原数据
+			$("#tablecontent").html('');
+			
+			$.each(data.data, function(i, order) {
+				var text = "<tr class=\"success\">" + 
+					"<td>" + order.no + "</td>" + 
+					"<td>" + order.vipNo + "</td>" + 
+					"<td>" + order.vipName + "</td>" + 
+					"<td>" + order.name + "</td>" + 
+					"<td>" + order.date + "</td>" + 
+					"<td>" + order.money + "</td>" + 
+					"</tr>";
+				$("#tablecontent").append(text);
+			});
+			
+			showPageNumber(page, data.page);
+		}, "json"
+	);
+	
 }
-function enableVipManage(page) {
+function enableVipManage(page, key) {
+	vipEnabled = true;
+	orderEnabled = false;
+	
 	$("#btnOrderList").removeClass('active');
 	$("#btnVipManage").addClass('active');
 	
@@ -56,7 +88,7 @@ function enableVipManage(page) {
 	});
 	
 	$.post("SearchVip", {
-		'key' : '',
+		'key' : key,
 		'page' : page,
 		'size' : 10
 	}, function(data, textStatus, req) {
@@ -73,21 +105,68 @@ function enableVipManage(page) {
 				"<td>" + vip.credit + "</td>" + 
 				"<td>" + vip.point + "</td>" + 
 				"<td>" + vip.level + "</td>";
-			text += "<td><button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_add_order')\">消费</button>/" + 
-				"<button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_charge')\">充值</button></td></tr>";
+			text += "<td><button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_add_order', 'order_vip_no', '" + vip.no +"')\">消费</button>&nbsp;" + 
+				"<button class=\"btn btn-primary btn-sm\" onclick=\"showWindow('win_charge', 'charge_vip_no', '" + vip.no +"')\">充值</button></td>&nbsp;" +
+				"<button class=\"btn btn-primary btn-sm\" onclick=\"deleteVip(" + vip.no + ")\">注销</button></tr>";
 			$("#tablecontent").append(text);
 		});
 		
-		var text = "";
-		$.each(data.page, function(i, item) {
-			text += "<li";
-			if (item == page) {
-				text += " class=\"active\"";
-			}
-			text += "><a href=\"#\">" + item + "</a></li>";
-		});
-		$("#pager").html(text);
+		showPageNumber(page, data.page);
 	}, "json");
+}
+
+function deleteVip(no) {
+	$.post("DeleteVip",{'no' : no}, function(data, status, req) {
+		if (status == 200) {
+			alert("注销成功");
+		} else {
+			alert("注销失败");
+		}
+	});
+}
+
+function showPageNumber(page, pageData) {
+	var text = "";
+	$.each(pageData, function(i, item) {
+		text += "<li";
+		if (item == page) {
+			text += " class=\"active\"";
+		}
+		if (vipEnabled) {
+			text += "><a href=\"enableVipManage(" + page + ", '')\">" + item + "</a></li>";
+		} else {
+			text += "><a href=\"enableOrderList(" + page + ", '')\">" + item + "</a></li>";
+		}
+	});
+	$("#pager").html(text);
+}
+
+function postOrder() {
+	$.post(
+		"AddOrder",
+		{
+			'vipNo' : $('#order_vip_no').val(),
+			'name' : $('#order_name').val(),
+			'money' : $('#order_money').val()
+		}, function(data, textStatus, req) {
+			if (textStatus == 200) {
+				alert("消费成功");
+			} else {
+				alert("消费失败");
+			}
+			enableOrderList(1);
+		}
+	);
+}
+
+function search() {
+	var keyword = $("#keyword").val();
+	if (vipEnabled) {
+		enableVipManage(1, keyword);
+	}
+	if (orderEnabled) {
+		enableOrderList(1, keyword);
+	}
 }
 </script>
 </head>
@@ -96,7 +175,9 @@ function enableVipManage(page) {
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-3">
-				<h3 style="display:inline">查询：</h3><input class="input-sm search-query" style="vertical-align:middle" type="text" />
+				<h3 style="display:inline">查询：</h3>
+				<input class="input-sm search-query" style="vertical-align:middle" 
+					type="text" id="keyword" onblur="search()"/>
 			</div>
 			<div class="col-lg-8">&nbsp;</div>
 			<div class="col-lg-1">
@@ -125,7 +206,7 @@ function enableVipManage(page) {
 								</tr>
 				        		<tr><td>&nbsp;</td></tr>
 								<tr>
-									<td><h3>等级</h3></td>
+									<td><h3>折扣</h3></td>
 									<td align="right"><input class="input-sm" type="text" name="level" size="20" /></td>
 				        		</tr>
 				        		<tr><td>&nbsp;</td></tr>
@@ -144,17 +225,20 @@ function enableVipManage(page) {
 				          <h4>新增订单</h4>
 				     </div>
 				     <div class="theme-popbod dform">
-				     	<form class="theme-signin" action="AddOrder" method="post">
+				     	<form class="theme-signin" onsubmit="postOrder()" method="post">
+				     		<input type="hidden" name="vipNo" id="order_vip_no"/>
 				        	<table width="70%" height="100%" cellspacing="20" >
 				        		<tr>
 				        			<td width="40%" align="right"><h3>商品/服务</h3></td>
-				        			<td width="60%" align="left"><input class="input-sm" type="text" name="name" size="20" /></td>
+				        			<td width="60%" align="left"><input class="input-sm" type="text" id="order_name" size="20" /></td>
 				        		</tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
-									<td align="right"><h3>价格(元)</h3></td>
-									<td align="left"><input class="input-sm" type="text" name="tel" size="20" /></td>
+									<td align="right"><h3>原价(元)</h3></td>
+									<td align="left"><input class="input-sm" type="text" id="order_money" size="20" /></td>
 								</tr>
+								<tr><td>&nbsp;</td></tr>
+				        		<tr><td colspan="2" style="text-align:center;color:red">&nbsp;注：将自动对应会员折扣&nbsp;</td></tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
 									<td colspan="2" align="center">
@@ -172,6 +256,7 @@ function enableVipManage(page) {
 				     </div>
 				     <div class="theme-popbod dform">
 				     	<form class="theme-signin" action="Charge" method="post">
+				     		<input type="hidden" name="vipNo" id="charge_vip_no"/>
 				        	<table width="50%" height="100%" cellspacing="20" style="margin-top: 50px">
 				        		<tr>
 				        			<td><h3>金额</h3></td>
@@ -205,8 +290,8 @@ function enableVipManage(page) {
 		<div class="row">
 			<div class="col-lg-6" style="text-align:left">
 				<ul class="nav nav-pills">
-				   <li id="btnVipManage" class="active"><a onclick="enableVipManage(1)">会员管理</a></li>
-				   <li id="btnOrderList"><a onclick="enableOrderList()">消费记录</a></li>
+				   <li id="btnVipManage" class="active"><a onclick="enableVipManage(1, '')">会员管理</a></li>
+				   <li id="btnOrderList"><a onclick="enableOrderList(1, '')">消费记录</a></li>
 				</ul>
 			</div>
 			<div class="col-lg-6" style="text-align:right">

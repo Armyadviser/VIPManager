@@ -144,11 +144,6 @@ public class FileHelper {
 		}
 	}
 	
-	/**
-	 * �ļ��������򴴽����ļ�
-	 * @param strFilePath
-	 * @return ���ش������ļ�����
-	 */
 	public static File createFile(String strFilePath) {
 		int endIndex = strFilePath.lastIndexOf("/");
 		if (endIndex == -1) {
@@ -172,13 +167,6 @@ public class FileHelper {
 		return file;
 	}
 	
-	/**
-	 * ��д�ļ���BufferedWriter�����
-	 * @param file Ŀ���ļ�
-	 * @param isAppend �Ƿ���׷�ӷ�ʽ��
-	 * @param encoding ����
-	 * @return
-	 */
 	public static BufferedWriter openFileBufferedWriterStream(File file, boolean isAppend, String encoding) {
 		try {
 			return new BufferedWriter(
@@ -190,13 +178,4 @@ public class FileHelper {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-		List<String> fileList = traversalDir("C:/Users/Storm_Falcon/Desktop/org", true);
-		for (int i = 0; i < fileList.size(); i++) {
-			String fileName = fileList.get(i);
-			fileName = fileName.substring(fileName.indexOf("org"), fileName.length() - 6);
-			fileName = fileName.replaceAll("\\\\", ".");
-			System.out.println(i + "" + fileName);
-		}
-	}
 }

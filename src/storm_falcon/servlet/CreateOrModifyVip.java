@@ -43,10 +43,11 @@ public class CreateOrModifyVip extends HttpServlet {
 		vip.level = Integer.parseInt(level);
 		vip.delsign = 1;
 		
-		System.out.println(vip);
-		
 		manager.add(vip);
 		manager.flush();
+		
+		System.out.println(new Date() + " add vip.");
+		System.out.println(vip);
 		
 		response.sendRedirect("info.jsp");
 	}

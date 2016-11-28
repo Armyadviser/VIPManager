@@ -60,6 +60,13 @@ public abstract class BaseManager<T extends BaseVO> {
 		flush();
 	}
 	
+	public void modifyByNo(String no, T t) {
+		mDataList = mDataList.stream()
+			.filter(item -> !item.no.equals(no))
+			.collect(Collectors.toList());
+		mDataList.add(t);
+	}
+	
 	public void delete(String no) {
 		mDataList = mDataList.stream()
 			.map(t -> {
@@ -78,13 +85,19 @@ public abstract class BaseManager<T extends BaseVO> {
 			.collect(Collectors.toList());
 	}
 	
+	public T getByNo(String no) {
+		return mDataList.stream()
+			.filter(item -> item.no.equals(no))
+			.findFirst()
+			.get();
+	}
+	
 	public void flush() {
 		FileWriter.writeAll(filePath, "UTF-8", mDataList);
 	}
 	
-	public static void main(String[] args) {
-		BaseManager<VIP> manager = VIPManager.getInstance();
-		String no = manager.formatNo(1);
-		System.out.println(no);
+	public void reload() {
+		loadDataFile();
 	}
+	
 }
