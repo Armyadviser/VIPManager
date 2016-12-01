@@ -36,7 +36,7 @@ public class SearchVip extends HttpServlet {
 		
 		List<VIP> list = search(key);
 		int[] nPages = SubPager.getPages(size, list.size());
-		list = subList(list, page, size);
+		list = SubPager.subList(list, page, size);
 		
 		PrintWriter out = response.getWriter();
 		String res = "{\"page\":" + Arrays.toString(nPages) + ",\"data\":" + list.toString() + "}";
@@ -52,15 +52,5 @@ public class SearchVip extends HttpServlet {
 			.filter(vip -> vip.delsign == 1)
 			.collect(Collectors.toList());
 		return list;
-	}
-	
-	private List<VIP> subList(List<VIP> list, int page, int size) {
-		int from = (page - 1) * size;
-		int to = from + size;
-		
-		if (to > list.size()) {
-			to = list.size();
-		}
-		return list.subList(from, to);
 	}
 }

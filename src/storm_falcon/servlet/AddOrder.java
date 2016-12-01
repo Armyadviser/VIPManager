@@ -13,6 +13,7 @@ import storm_falcon.bean.Order;
 import storm_falcon.bean.OrderManager;
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
+import storm_falcon.util.Logger;
 
 public class AddOrder extends HttpServlet {
 
@@ -41,7 +42,15 @@ public class AddOrder extends HttpServlet {
 		VIP vip = vMgr.getByNo(vipNo);
 		
 		//check credit
-		double cost = vip.level * Double.parseDouble(money) * 0.1;
+		double cost = 0;
+		try {
+			cost = vip.level * Double.parseDouble(money) * 0.1;
+		} catch (Exception e) {
+			out.print("金额错误");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			out.close();
+			return;
+		}
 		if (vip.credit < cost) {
 			out.print("余额不足");
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -70,8 +79,7 @@ public class AddOrder extends HttpServlet {
 		newVip.point = (int) (vip.point + cost);
 		vMgr.modifyByNo(vip.no, newVip);
 		
-		System.out.println(new Date() + " add order.");
-		System.out.println(order);
+		Logger.log("Add order.", order.toString());
 	}
 
 }

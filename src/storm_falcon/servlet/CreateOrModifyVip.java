@@ -1,6 +1,7 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
+import storm_falcon.util.Logger;
 
 public class CreateOrModifyVip extends HttpServlet {
 
@@ -31,6 +33,23 @@ public class CreateOrModifyVip extends HttpServlet {
 		String credit = request.getParameter("credit");
 		String level = request.getParameter("level");
 		
+		try {
+			double d = Double.parseDouble(credit);
+			if (d < 0) {
+				throw new Exception();
+			}
+			d = Double.parseDouble(level);
+			if (d <= 0 || d > 10) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			PrintWriter out = response.getWriter();
+			out.print("数据错误");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			out.close();
+			return;
+		}
+		
 		VIPManager manager = VIPManager.getInstance();
 
 		VIP vip = new VIP();
@@ -40,14 +59,13 @@ public class CreateOrModifyVip extends HttpServlet {
 		vip.date = new Date();
 		vip.credit = Double.parseDouble(credit);
 		vip.point = 0;
-		vip.level = Integer.parseInt(level);
+		vip.level = Double.parseDouble(level);
 		vip.delsign = 1;
 		
 		manager.add(vip);
 		manager.flush();
 		
-		System.out.println(new Date() + " add vip.");
-		System.out.println(vip);
+		Logger.log("Add vip.", vip.toString());
 		
 		response.sendRedirect("info.jsp");
 	}

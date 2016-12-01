@@ -133,9 +133,9 @@ function showPageNumber(page, pageData) {
 			text += " class=\"active\"";
 		}
 		if (vipEnabled) {
-			text += "><a href=\"enableVipManage(" + page + ", '')\">" + item + "</a></li>";
+			text += "><a onclick=\"enableVipManage(" + item + ", '')\">" + item + "</a></li>";
 		} else {
-			text += "><a href=\"enableOrderList(" + page + ", '')\">" + item + "</a></li>";
+			text += "><a onclick=\"enableOrderList(" + item + ", '')\">" + item + "</a></li>";
 		}
 	});
 	$("#pager").html(text);
@@ -152,11 +152,28 @@ function postOrder() {
 			if (textStatus == 200) {
 				alert("消费成功");
 			} else {
-				alert("消费失败");
+				alert(data);
 			}
 			enableOrderList(1);
 		}
 	);
+}
+
+function addVip() {
+	$.post(
+		"CreateOrModifyVip",
+		{
+			'name':$('#name').val(),
+			'tel':$('#tel').val(),
+			'credit':$('#credit').val(),
+			'level':$('#level').val()
+		}, function(data, textStatus, req) {
+			if (textStatus == 200) {
+				alert("添加成功");
+			} else {
+				alert(data);
+			}
+		});
 }
 
 function search() {
@@ -188,26 +205,26 @@ function search() {
 				          <h4>添加VIP信息</h4>
 				     </div>
 				     <div class="theme-popbod dform">
-				     	<form class="theme-signin" action="CreateOrModifyVip" method="post">
+				     	<form class="theme-signin" onsubmit="addVip()" method="post">
 				        	<table width="50%" height="100%" cellspacing="20" >
 				        		<tr>
 				        			<td><h3>姓名</h3></td>
-				        			<td align="right"><input class="input-sm" type="text" name="name" size="20" /></td>
+				        			<td align="right"><input class="input-sm" type="text" id="name" size="20" /></td>
 				        		</tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
 									<td><h3>电话</h3></td>
-									<td align="right"><input class="input-sm" type="text" name="tel" size="20" /></td>
+									<td align="right"><input class="input-sm" type="text" id="tel" size="20" /></td>
 								</tr>
 				        		<tr><td>&nbsp;</td></tr>
 								<tr>
 									<td><h3>余额</h3></td>
-									<td align="right"><input class="input-sm" type="text" name="credit" size="20" /></td>
+									<td align="right"><input class="input-sm" type="text" id="credit" size="20" /></td>
 								</tr>
 				        		<tr><td>&nbsp;</td></tr>
 								<tr>
 									<td><h3>折扣</h3></td>
-									<td align="right"><input class="input-sm" type="text" name="level" size="20" /></td>
+									<td align="right"><input class="input-sm" type="text" id="level" size="20" /></td>
 				        		</tr>
 				        		<tr><td>&nbsp;</td></tr>
 				        		<tr>
@@ -290,8 +307,8 @@ function search() {
 		<div class="row">
 			<div class="col-lg-6" style="text-align:left">
 				<ul class="nav nav-pills">
-				   <li id="btnVipManage" class="active"><a onclick="enableVipManage(1, '')">会员管理</a></li>
-				   <li id="btnOrderList"><a onclick="enableOrderList(1, '')">消费记录</a></li>
+				   <li id="btnVipManage" class="active"><a onclick="enableVipManage(1,'')">会员管理</a></li>
+				   <li id="btnOrderList"><a onclick="enableOrderList(1,'')">消费记录</a></li>
 				</ul>
 			</div>
 			<div class="col-lg-6" style="text-align:right">

@@ -10,7 +10,7 @@ public class VIP extends BaseVO {
 	public String tel = null;//电话
 	public double credit;//余额
 	public int point;//积分
-	public int level;//等级
+	public double level;//等级
 
 	@Override
 	public String getKeyword() {
