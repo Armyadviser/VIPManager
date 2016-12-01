@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import storm_falcon.file.FileHelper;
 import storm_falcon.file.FileReader;
 import storm_falcon.file.FileWriter;
 
@@ -19,6 +20,7 @@ public abstract class BaseManager<T extends BaseVO> {
 	protected BaseManager(String fileName) {
 		String basePath = System.getProperty("user.dir") + "/";
 		filePath = basePath + fileName;
+		FileHelper.createIfNotExist(filePath);
 		loadDataFile();
 	}
 	
@@ -78,7 +80,11 @@ public abstract class BaseManager<T extends BaseVO> {
 		flush();
 	}
 	
-	public List<T> search(String keyword) {
+	public List<T> search(String searchKey) {
+		if (searchKey == null) {
+			searchKey = "";
+		}
+		final String keyword = searchKey;
 		Collections.sort(mDataList, (t1, t2) -> t1.no.compareTo(t2.no));
 		return mDataList.stream()
 			.filter(t -> t.getKeyword().contains(keyword))
@@ -94,6 +100,7 @@ public abstract class BaseManager<T extends BaseVO> {
 	
 	public void flush() {
 		FileWriter.writeAll(filePath, "UTF-8", mDataList);
+		loadDataFile();
 	}
 	
 	public void reload() {

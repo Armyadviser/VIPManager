@@ -1,7 +1,6 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
 import storm_falcon.util.Logger;
+import storm_falcon.util.ServletUtil;
 
 public class CreateOrModifyVip extends HttpServlet {
 
@@ -43,10 +43,7 @@ public class CreateOrModifyVip extends HttpServlet {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			PrintWriter out = response.getWriter();
-			out.print("数据错误");
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			out.close();
+			ServletUtil.sendToClient(response, "数据错误");
 			return;
 		}
 		
@@ -67,7 +64,7 @@ public class CreateOrModifyVip extends HttpServlet {
 		
 		Logger.log("Add vip.", vip.toString());
 		
-		response.sendRedirect("info.jsp");
+		ServletUtil.sendToClient(response, "创建成功");
 	}
 
 }

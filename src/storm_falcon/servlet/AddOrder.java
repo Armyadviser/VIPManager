@@ -1,7 +1,6 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -14,6 +13,8 @@ import storm_falcon.bean.OrderManager;
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
 import storm_falcon.util.Logger;
+import storm_falcon.util.NumberHelper;
+import storm_falcon.util.ServletUtil;
 
 public class AddOrder extends HttpServlet {
 
@@ -31,8 +32,6 @@ public class AddOrder extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		
-		PrintWriter out = response.getWriter();
-		
 		String name = request.getParameter("name");
 		String money = request.getParameter("money");
 		String vipNo = request.getParameter("vipNo");
@@ -45,16 +44,13 @@ public class AddOrder extends HttpServlet {
 		double cost = 0;
 		try {
 			cost = vip.level * Double.parseDouble(money) * 0.1;
+			cost = NumberHelper.format(cost);
 		} catch (Exception e) {
-			out.print("金额错误");
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			out.close();
+			ServletUtil.sendToClient(response, "金额错误");
 			return;
 		}
 		if (vip.credit < cost) {
-			out.print("余额不足");
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			out.close();
+			ServletUtil.sendToClient(response, "余额不足");
 			return;
 		}
 		
@@ -77,9 +73,13 @@ public class AddOrder extends HttpServlet {
 		VIP newVip = (VIP) vip.clone();
 		newVip.credit = vip.credit - cost;
 		newVip.point = (int) (vip.point + cost);
+		
 		vMgr.modifyByNo(vip.no, newVip);
+		vMgr.flush();
 		
 		Logger.log("Add order.", order.toString());
+		
+		ServletUtil.sendToClient(response, "消费成功");
 	}
 
 }

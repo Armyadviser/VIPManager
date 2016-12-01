@@ -144,6 +144,13 @@ public class FileHelper {
 		}
 	}
 	
+	public static void createIfNotExist(String filePath) {
+		if (new File(filePath).exists()) {
+			return;
+		}
+		createFile(filePath);
+	}
+	
 	public static File createFile(String strFilePath) {
 		int endIndex = strFilePath.lastIndexOf("/");
 		if (endIndex == -1) {

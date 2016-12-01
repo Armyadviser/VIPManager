@@ -149,11 +149,7 @@ function postOrder() {
 			'name' : $('#order_name').val(),
 			'money' : $('#order_money').val()
 		}, function(data, textStatus, req) {
-			if (textStatus == 200) {
-				alert("消费成功");
-			} else {
-				alert(data);
-			}
+			alert(data);
 			enableOrderList(1);
 		}
 	);
@@ -168,11 +164,7 @@ function addVip() {
 			'credit':$('#credit').val(),
 			'level':$('#level').val()
 		}, function(data, textStatus, req) {
-			if (textStatus == 200) {
-				alert("添加成功");
-			} else {
-				alert(data);
-			}
+			alert(data);
 		});
 }
 

@@ -1,7 +1,6 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import storm_falcon.bean.Order;
 import storm_falcon.bean.OrderManager;
+import storm_falcon.util.ServletUtil;
 import storm_falcon.util.SubPager;
 
 public class SearchOrder extends HttpServlet {
@@ -36,22 +36,9 @@ public class SearchOrder extends HttpServlet {
 		OrderManager manager = OrderManager.getInstance();
 		List<Order> list = manager.search(key);
 		int[] nPages = SubPager.getPages(size, list.size());
-		list = subList(list, page, size);
+		list = SubPager.subList(list, page, size);
 		
-		PrintWriter out = response.getWriter();
-		out.print("{\"page\":" + Arrays.toString(nPages) + ",\"data\":" + list.toString() + "}");
-		out.flush();
-		out.close();
+		ServletUtil.sendToClient(response, "{\"page\":" + Arrays.toString(nPages) + ",\"data\":" + list.toString() + "}");
 	}
 	
-	private List<Order> subList(List<Order> list, int page, int size) {
-		int from = (page - 1) * size;
-		int to = from + size;
-		
-		if (to > list.size()) {
-			to = list.size();
-		}
-		return list.subList(from, to);
-	}
-
 }

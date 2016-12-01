@@ -1,7 +1,6 @@
 package storm_falcon.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import storm_falcon.bean.VIP;
 import storm_falcon.bean.VIPManager;
+import storm_falcon.util.ServletUtil;
 import storm_falcon.util.SubPager;
 
 public class SearchVip extends HttpServlet {
@@ -38,11 +38,8 @@ public class SearchVip extends HttpServlet {
 		int[] nPages = SubPager.getPages(size, list.size());
 		list = SubPager.subList(list, page, size);
 		
-		PrintWriter out = response.getWriter();
 		String res = "{\"page\":" + Arrays.toString(nPages) + ",\"data\":" + list.toString() + "}";
-		out.print(res);
-		out.flush();
-		out.close();
+		ServletUtil.sendToClient(response, res);
 	}
 	
 	private List<VIP> search(String key) {
